@@ -1,13 +1,11 @@
 ### A Pluto.jl notebook ###
-# v0.14.5
+# v0.15.1
 
 using Markdown
 using InteractiveUtils
 
-# ╔═╡ 650b2fb2-e643-11eb-342d-e73a1c96a301
-md"""
-# Root Finding
-"""
+# ╔═╡ 1e2f2dca-254e-4e81-a601-c67d03e5f2b9
+using PlutoUI
 
 # ╔═╡ ee46a754-c038-4943-84f3-e0ed43f8a432
 md"## Big-O-Notation
@@ -147,8 +145,87 @@ $c_{n} = b_n - f(b_n)\frac{b_n - a_n}{f(b_n) - f(a_n)}$
 # ╔═╡ 78abaf4c-464a-4e7d-9a74-88aa7e37fd00
 md"**_Note: In practive combination several root-finding algorithms can be used for a particular problem. For example: First using bisection method to narrow in on the neighbourhood of root and then using Newton-Raphson method to improve rate of convergence._**"
 
+# ╔═╡ f9a65d00-0686-4de7-aabd-c068df350d93
+PlutoUI.TableOfContents(title="Root Finding")
+
+# ╔═╡ 00000000-0000-0000-0000-000000000001
+PLUTO_PROJECT_TOML_CONTENTS = """
+[deps]
+PlutoUI = "7f904dfe-b85e-4ff6-b463-dae2292396a8"
+
+[compat]
+PlutoUI = "~0.7.9"
+"""
+
+# ╔═╡ 00000000-0000-0000-0000-000000000002
+PLUTO_MANIFEST_TOML_CONTENTS = """
+# This file is machine-generated - editing it directly is not advised
+
+[[Base64]]
+uuid = "2a0f44e3-6c83-55bd-87e4-b1978d98bd5f"
+
+[[Dates]]
+deps = ["Printf"]
+uuid = "ade2ca70-3891-5945-98fb-dc099432e06a"
+
+[[InteractiveUtils]]
+deps = ["Markdown"]
+uuid = "b77e0a4c-d291-57a0-90e8-8db25a27a240"
+
+[[JSON]]
+deps = ["Dates", "Mmap", "Parsers", "Unicode"]
+git-tree-sha1 = "81690084b6198a2e1da36fcfda16eeca9f9f24e4"
+uuid = "682c06a0-de6a-54ab-a142-c8b1cf79cde6"
+version = "0.21.1"
+
+[[Logging]]
+uuid = "56ddb016-857b-54e1-b83d-db4d58db5568"
+
+[[Markdown]]
+deps = ["Base64"]
+uuid = "d6f4376e-aef5-505a-96c1-9c027394607a"
+
+[[Mmap]]
+uuid = "a63ad114-7e13-5084-954f-fe012c677804"
+
+[[Parsers]]
+deps = ["Dates"]
+git-tree-sha1 = "c8abc88faa3f7a3950832ac5d6e690881590d6dc"
+uuid = "69de0a69-1ddd-5017-9359-2bf0b02dc9f0"
+version = "1.1.0"
+
+[[PlutoUI]]
+deps = ["Base64", "Dates", "InteractiveUtils", "JSON", "Logging", "Markdown", "Random", "Reexport", "Suppressor"]
+git-tree-sha1 = "44e225d5837e2a2345e69a1d1e01ac2443ff9fcb"
+uuid = "7f904dfe-b85e-4ff6-b463-dae2292396a8"
+version = "0.7.9"
+
+[[Printf]]
+deps = ["Unicode"]
+uuid = "de0858da-6303-5e67-8744-51eddeeeb8d7"
+
+[[Random]]
+deps = ["Serialization"]
+uuid = "9a3f8284-a2c9-5f02-9a11-845980a1fd5c"
+
+[[Reexport]]
+git-tree-sha1 = "5f6c21241f0f655da3952fd60aa18477cf96c220"
+uuid = "189a3867-3050-52da-a836-e630ba90ab69"
+version = "1.1.0"
+
+[[Serialization]]
+uuid = "9e88b42a-f829-5b0c-bbe9-9e923198166b"
+
+[[Suppressor]]
+git-tree-sha1 = "a819d77f31f83e5792a76081eee1ea6342ab8787"
+uuid = "fd094767-a336-5f1f-9728-57cf17d0bbfb"
+version = "0.2.0"
+
+[[Unicode]]
+uuid = "4ec0a83e-493e-50e2-b9ac-8f72acf5a8f5"
+"""
+
 # ╔═╡ Cell order:
-# ╟─650b2fb2-e643-11eb-342d-e73a1c96a301
 # ╟─ee46a754-c038-4943-84f3-e0ed43f8a432
 # ╟─d016f099-cf2f-4542-919f-92e1f66e5088
 # ╟─97b8b796-c35d-4d2d-8c3a-6973c6f445ce
@@ -162,3 +239,7 @@ md"**_Note: In practive combination several root-finding algorithms can be used 
 # ╟─cabeb6ca-ed06-40bc-b740-5390bfdf951f
 # ╟─26cbf636-8dea-46f3-916b-7b7a02269d7c
 # ╟─78abaf4c-464a-4e7d-9a74-88aa7e37fd00
+# ╟─1e2f2dca-254e-4e81-a601-c67d03e5f2b9
+# ╟─f9a65d00-0686-4de7-aabd-c068df350d93
+# ╟─00000000-0000-0000-0000-000000000001
+# ╟─00000000-0000-0000-0000-000000000002
