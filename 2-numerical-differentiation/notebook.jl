@@ -90,10 +90,103 @@ $\implies f''(x) = \frac{f(x-h) - 2f(x) + f(x+h)}{h^2} + O(h^2)$
 
 
 # ╔═╡ 43f6eb4b-23a4-4f1f-80da-d77ee2fdf458
-md"# The Euler Methods"
+md"# The Euler Method"
 
 # ╔═╡ 94c1a797-67a4-4ad6-8a54-10cc7071f5d0
+md"
+## The Forward Euler Method
 
+- Given an initial value problem, we can express the ODE in terms of finite differences as:
+$\frac{dy}{dx} = f(y(x), x), \hspace{0.1in} y(x_0) = y_0$
+$\implies \frac{y(x+h) - y(x)}{h} \approx f(y(x),x)$
+$\implies y(x+h) \approx y(x) + hf(y(x),x).$
+
+- In order to discretize the quantities $(y(x), x)$, we choose a step size $h = \Delta x$ and discretize the x-coordinate.
+
+- If we have $N$ discrete values of $x$-coordinate then we can denote these by: $x_0, x_1, \dots, x_{N-1}$ and corresponding $y(x)$ by: $y_0, y_1, \dots, y_{N-1}$.
+
+- So, we have
+$\boxed{y_{n+1} \approx y_n + \Delta f(y_n, x_n)}$
+
+- This is an **explicit** method i.e the next point in series is completely determined by the previous points in series. 
+"
+
+# ╔═╡ ac9cc650-c65e-4d62-a7df-bad8966c0bc5
+md"
+## The Backward Euler Method
+
+- If we use the backward finite difference in place of forward, the we get the backward Euler method.
+
+$y'(x) = f(y(x), x)$
+$\implies y(x) \approx y(x-h) + hf(y(x), x)$
+$\implies y(x+h) \approx y(x) + hf(y(x+h), x+h) \hspace{0.5in} \text{(After change in variables)}$
+
+- After discretizing: 
+$y_{n+1} \approx y_n + \Delta x f(y_{n+1}, x_{n+1})$
+
+- This is an **implicit** method i.e. it involves points both at current and next step (_which are unknown_) in calculation. So, for solving this we either have to make it explicit if possible for the given $f(y(x), x)$, or otherwise we rearrange the equation and find the roots of $y_{n+1}$ numerically at each iteration:
+
+$y_{n+1} - y_n - \Delta x f(y_{n+1}, x_{n+1}) = 0$
+
+**Note:** For sufficiently small $\Delta x$ we can take initial guess of root of the above equation to be $y_{n}$ and then make the iterations to better approximate the root because $y_{n+1}$ and $y_{n}$ should be in vicinity.
+"
+
+# ╔═╡ c9ab491c-2655-42da-a03e-246470d06fc7
+md"
+**IMPORTANT THINGS**
+
+- _Step truncation error_: Error that occurs at each step due to appxoimation of taylor series.
+
+- _Global error_: Error that results in final value due to accumulation of step truncation errors. This is equal to the number of iterations times the step truncation error.
+
+- Both forward and backward euler method have second-order step truncation error whereas first order global error. So, both the algorithms are **first-order**.
+
+- We can note that generally backward euler method is more computationally expensive compared to the forward method, as there is an extra step of calculating root at each iteration.
+
+- Backward euler method does have some advantages compared to forward euler method when we talk about stability of the algorithms i.e. algorithm is stable if it doesn't oscillates and grows to infinity.
+
+- Forward euler method has a much restricted set of values of $\Delta x$ for which it is stable compared to backward euler method which is almost always stable except for some $\Delta x$. This can be seem by performing stability analysis. See _5.4, Computational Quantum Mechanics, Joshua Izaax, Jingbo Wang_.
+"
+
+# ╔═╡ 266c961c-66b1-48df-975c-0e14b98f7df8
+
+
+# ╔═╡ 9a17ced8-4c1a-4743-af51-2f45cc318a1d
+md"# The Leap Frog Method"
+
+# ╔═╡ 6684910a-0664-474b-ada1-8dd460cf7b74
+md"
+This method uses central difference formula to solve first order ODEs.
+
+$y'(x) = f(y(x), x)$
+$\implies \frac{y(x+h) - y(x-h)}{2h} \approx f(y(x), x)$
+$\implies y(x+h) \approx y(x-h) + 2hf(y(x), x)$
+
+In discrete form:
+
+$\boxed{y_{n+1} = y_{n-1} + 2 \Delta xf(y_n, x_n)}$
+
+- In order to use this method explicitly we need two initial conditions i.e. $y_0$ and $y_1$. We can get $y_1$ from $y_0$ using forward euler method.
+
+- The step truncation method of leap frog method is of order $h^3$, and the global error is of order $h^2$. Hence, the leap-frog method is a **second order** method.
+- For stability see section _5.5.2 Computational Quantum Mechanics, Joshua Izaax, Jingbo Wang_.
+"
+
+# ╔═╡ 6f857855-8b1c-48cf-a56e-20ef3a26b574
+
+
+# ╔═╡ b3693dc4-b08b-4429-9741-88ced438f5b7
+md"
+# Packages 
+
+These are the available packages for numerical differentiation:
+
+- [_FiniteDifferences.jl_](https://github.com/JuliaDiff/FiniteDifferences.jl)
+
+- [_FiniteDiff.jl_](https://github.com/JuliaDiff/FiniteDiff.jl)
+
+- [_FDM_](https://github.com/wesselb/fdm)
+"
 
 # ╔═╡ 00000000-0000-0000-0000-000000000001
 PLUTO_PROJECT_TOML_CONTENTS = """
@@ -174,7 +267,6 @@ uuid = "4ec0a83e-493e-50e2-b9ac-8f72acf5a8f5"
 
 # ╔═╡ Cell order:
 # ╟─7cbdea3c-e478-434d-92d6-4d2ea5627d8b
-# ╟─8493fa58-4543-49a5-9ecc-0861ce4a3a35
 # ╟─3e749362-258f-4d82-990c-ddc2b9325514
 # ╟─3f492f16-f235-4f1b-8802-98bce8b9a9ae
 # ╟─9cae0885-5df6-45cb-9a17-f1bab51c86eb
@@ -184,6 +276,14 @@ uuid = "4ec0a83e-493e-50e2-b9ac-8f72acf5a8f5"
 # ╟─ecf8d6af-988f-4eee-ae4d-71e2c8c830f5
 # ╟─36cbb557-abc3-45f5-8716-930eaf282e25
 # ╟─43f6eb4b-23a4-4f1f-80da-d77ee2fdf458
-# ╠═94c1a797-67a4-4ad6-8a54-10cc7071f5d0
+# ╟─94c1a797-67a4-4ad6-8a54-10cc7071f5d0
+# ╟─ac9cc650-c65e-4d62-a7df-bad8966c0bc5
+# ╟─c9ab491c-2655-42da-a03e-246470d06fc7
+# ╟─266c961c-66b1-48df-975c-0e14b98f7df8
+# ╟─9a17ced8-4c1a-4743-af51-2f45cc318a1d
+# ╟─6684910a-0664-474b-ada1-8dd460cf7b74
+# ╟─6f857855-8b1c-48cf-a56e-20ef3a26b574
+# ╟─b3693dc4-b08b-4429-9741-88ced438f5b7
+# ╟─8493fa58-4543-49a5-9ecc-0861ce4a3a35
 # ╟─00000000-0000-0000-0000-000000000001
 # ╟─00000000-0000-0000-0000-000000000002
