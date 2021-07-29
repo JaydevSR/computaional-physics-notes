@@ -5,7 +5,13 @@ using Markdown
 using InteractiveUtils
 
 # ╔═╡ 1e2f2dca-254e-4e81-a601-c67d03e5f2b9
-using PlutoUI
+begin
+	using PlutoUI
+	PlutoUI.TableOfContents(title="Table of Contents")
+end
+
+# ╔═╡ bad62161-1ef0-4bc4-b713-a1214f9fe1ee
+md"# Preliminaries: Root Finding"
 
 # ╔═╡ ee46a754-c038-4943-84f3-e0ed43f8a432
 md"## Big-O-Notation
@@ -145,8 +151,14 @@ $c_{n} = b_n - f(b_n)\frac{b_n - a_n}{f(b_n) - f(a_n)}$
 # ╔═╡ 78abaf4c-464a-4e7d-9a74-88aa7e37fd00
 md"**_Note: In practive combination several root-finding algorithms can be used for a particular problem. For example: First using bisection method to narrow in on the neighbourhood of root and then using Newton-Raphson method to improve rate of convergence._**"
 
-# ╔═╡ f9a65d00-0686-4de7-aabd-c068df350d93
-PlutoUI.TableOfContents(title="Root Finding")
+# ╔═╡ a6f947b2-f9ae-4108-bb12-4dc5d5e0bb42
+md"
+## Packages
+
+- [Roots.jl](https://github.com/JuliaMath/Roots.jl)
+- [IntervalRoots.jl](https://github.com/JuliaIntervals/IntervalRootFinding.jl)
+- [SciPy](https://docs.scipy.org/doc/scipy/reference/generated/scipy.optimize.root.html)
+"
 
 # ╔═╡ 00000000-0000-0000-0000-000000000001
 PLUTO_PROJECT_TOML_CONTENTS = """
@@ -226,6 +238,8 @@ uuid = "4ec0a83e-493e-50e2-b9ac-8f72acf5a8f5"
 """
 
 # ╔═╡ Cell order:
+# ╟─bad62161-1ef0-4bc4-b713-a1214f9fe1ee
+# ╟─1e2f2dca-254e-4e81-a601-c67d03e5f2b9
 # ╟─ee46a754-c038-4943-84f3-e0ed43f8a432
 # ╟─d016f099-cf2f-4542-919f-92e1f66e5088
 # ╟─97b8b796-c35d-4d2d-8c3a-6973c6f445ce
@@ -239,7 +253,6 @@ uuid = "4ec0a83e-493e-50e2-b9ac-8f72acf5a8f5"
 # ╟─cabeb6ca-ed06-40bc-b740-5390bfdf951f
 # ╟─26cbf636-8dea-46f3-916b-7b7a02269d7c
 # ╟─78abaf4c-464a-4e7d-9a74-88aa7e37fd00
-# ╟─1e2f2dca-254e-4e81-a601-c67d03e5f2b9
-# ╟─f9a65d00-0686-4de7-aabd-c068df350d93
+# ╟─a6f947b2-f9ae-4108-bb12-4dc5d5e0bb42
 # ╟─00000000-0000-0000-0000-000000000001
 # ╟─00000000-0000-0000-0000-000000000002

@@ -7,9 +7,6 @@ using InteractiveUtils
 # ╔═╡ 7cbdea3c-e478-434d-92d6-4d2ea5627d8b
 using PlutoUI
 
-# ╔═╡ 8493fa58-4543-49a5-9ecc-0861ce4a3a35
-PlutoUI.TableOfContents(title="TOC: Numerical Differentiation")
-
 # ╔═╡ 3e749362-258f-4d82-990c-ddc2b9325514
 md"# Method of Finite Differences"
 
@@ -91,6 +88,11 @@ $\implies f''(x) = \frac{f(x-h) - 2f(x) + f(x+h)}{h^2} + O(h^2)$
 
 # ╔═╡ 43f6eb4b-23a4-4f1f-80da-d77ee2fdf458
 md"# The Euler Method"
+
+# ╔═╡ f7e40646-29ee-456f-8af1-6452d7104509
+md"
+Used to solve first order initial value problems. (ODEs)
+"
 
 # ╔═╡ 94c1a797-67a4-4ad6-8a54-10cc7071f5d0
 md"
@@ -175,6 +177,69 @@ $\boxed{y_{n+1} = y_{n-1} + 2 \Delta xf(y_n, x_n)}$
 # ╔═╡ 6f857855-8b1c-48cf-a56e-20ef3a26b574
 
 
+# ╔═╡ 28a63d39-0762-4280-810f-389699f3f424
+md"
+**IMPORTANT TERM**
+
+_Round-off error_: The value of $\Delta x$ that can be used in the implementation of the implementation of the algorithm also depends upon the precision of the floating point numbers being used. In the implementations we use fixed precision numbers which results in rounding of the actual results. This accumulates as the round-off errors. To minimize these errors, higher precision floating point numbers should be used such as, double precision.
+"
+
+# ╔═╡ 2e39dd68-bd8d-4aa9-8fa2-467c592d7b05
+
+
+# ╔═╡ b0190855-be2d-49d9-822b-c3d36a764664
+md"
+# Explicit Runge-Kutta Methods
+"
+
+# ╔═╡ 8e900c40-3945-483e-b3ae-85a4600bd6ef
+md"
+## The Midpoint/Modified Euler method
+
+- We are given an initial value problem:
+$y'(x) = f(y(x), x), \hspace{0.1in} y(0) = y_0;$
+
+- Instead of using forward/backward difference, we use the central difference formula but with points $\{ x, x + \frac{h}{2}, x + h\}$ instead of $\{x - h, x, x + h\}$. so, we get:
+
+$\frac{y(x+h) - y(x)}{h} = f\Bigg(y\bigg(x + \frac{h}{2}\bigg), x+\frac{h}{2}\Bigg) \hspace{0.2in} \text{and,}$
+$y\bigg(x + \frac{h}{2}\bigg) \approx y(x) + \frac{h}{2}f(y(x), x) \hspace{0.2in} \text{(Forward Difference)}$
+
+- Combining all this together we get:
+
+$y(x+h) \approx y(x) + hf\bigg(y(x) + \frac{h}{2}f(y(x), x), x+\frac{h}{2}\bigg)$
+
+- Now, we dicretize the domain and range to get:
+
+$\boxed{y_{n+1} = y_n + k_2 \Delta x + \mathcal{O}(\Delta x ^ 3)} \hspace{0.2in} \text{where,}$
+$k_2 = f(y_n + \frac{1}{2}k_1 \Delta x, x_n + \frac{1}{2}\Delta x) \hspace{0.2in} \text{and,}$
+$k_1 = f(y_n, x_n)$
+
+- Now, we have a two step Runge-Kutta algorithm, generally known as modified or midpoint Euler method.
+
+- The step error is of order $h^3$ and the global error is of the order $h^2$. Hence, this is a second order method.
+"
+
+# ╔═╡ 5361f744-9e6c-4402-87d4-8bfd7470c9e2
+md"
+**Important Note**
+
+- The Explicit Runge-Kutta methods form a family of methods which are described by some coefficients like, $k_1$ and $k_2$ in the above method. These coefficients are related to each other by some relations that are derived to minimize the error.
+
+- This family of methods is known as the general Runge-Kutta method. The above modified euler method is a two step method, but the general method can be extended to any number of steps in order to get the error within desired bound.
+
+- See: [General Two Step method (RK2)](https://web.mit.edu/10.001/Web/Course_Notes/Differential_Equations_Notes/node5.html)
+"
+
+# ╔═╡ e030c23a-d69a-42db-b01b-104c69622a88
+
+
+# ╔═╡ 4a74b198-a328-403a-a342-683aae2672c2
+md"
+# Implicit Runge-Kutta Methods
+
+
+"
+
 # ╔═╡ b3693dc4-b08b-4429-9741-88ced438f5b7
 md"
 # Packages 
@@ -187,6 +252,9 @@ These are the available packages for numerical differentiation:
 
 - [_FDM_](https://github.com/wesselb/fdm)
 "
+
+# ╔═╡ 8493fa58-4543-49a5-9ecc-0861ce4a3a35
+PlutoUI.TableOfContents(title="TOC: Numerical Differentiation")
 
 # ╔═╡ 00000000-0000-0000-0000-000000000001
 PLUTO_PROJECT_TOML_CONTENTS = """
@@ -266,7 +334,6 @@ uuid = "4ec0a83e-493e-50e2-b9ac-8f72acf5a8f5"
 """
 
 # ╔═╡ Cell order:
-# ╟─7cbdea3c-e478-434d-92d6-4d2ea5627d8b
 # ╟─3e749362-258f-4d82-990c-ddc2b9325514
 # ╟─3f492f16-f235-4f1b-8802-98bce8b9a9ae
 # ╟─9cae0885-5df6-45cb-9a17-f1bab51c86eb
@@ -276,6 +343,7 @@ uuid = "4ec0a83e-493e-50e2-b9ac-8f72acf5a8f5"
 # ╟─ecf8d6af-988f-4eee-ae4d-71e2c8c830f5
 # ╟─36cbb557-abc3-45f5-8716-930eaf282e25
 # ╟─43f6eb4b-23a4-4f1f-80da-d77ee2fdf458
+# ╟─f7e40646-29ee-456f-8af1-6452d7104509
 # ╟─94c1a797-67a4-4ad6-8a54-10cc7071f5d0
 # ╟─ac9cc650-c65e-4d62-a7df-bad8966c0bc5
 # ╟─c9ab491c-2655-42da-a03e-246470d06fc7
@@ -283,7 +351,15 @@ uuid = "4ec0a83e-493e-50e2-b9ac-8f72acf5a8f5"
 # ╟─9a17ced8-4c1a-4743-af51-2f45cc318a1d
 # ╟─6684910a-0664-474b-ada1-8dd460cf7b74
 # ╟─6f857855-8b1c-48cf-a56e-20ef3a26b574
+# ╟─28a63d39-0762-4280-810f-389699f3f424
+# ╟─2e39dd68-bd8d-4aa9-8fa2-467c592d7b05
+# ╟─b0190855-be2d-49d9-822b-c3d36a764664
+# ╟─8e900c40-3945-483e-b3ae-85a4600bd6ef
+# ╟─5361f744-9e6c-4402-87d4-8bfd7470c9e2
+# ╟─e030c23a-d69a-42db-b01b-104c69622a88
+# ╠═4a74b198-a328-403a-a342-683aae2672c2
 # ╟─b3693dc4-b08b-4429-9741-88ced438f5b7
+# ╟─7cbdea3c-e478-434d-92d6-4d2ea5627d8b
 # ╟─8493fa58-4543-49a5-9ecc-0861ce4a3a35
 # ╟─00000000-0000-0000-0000-000000000001
 # ╟─00000000-0000-0000-0000-000000000002
