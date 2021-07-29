@@ -5,10 +5,19 @@ using Markdown
 using InteractiveUtils
 
 # ╔═╡ 7cbdea3c-e478-434d-92d6-4d2ea5627d8b
-using PlutoUI
+begin
+	using PlutoUI
+	PlutoUI.TableOfContents(title="TOC: Numerical Differentiation")
+end
+
+# ╔═╡ bad12d58-51ca-438b-8dbb-ff8bec1715cb
+md"# Preliminaries: Numerical Differentiation"
+
+# ╔═╡ 2fffa41b-db5e-4ade-a223-6c08ba8a420c
+
 
 # ╔═╡ 3e749362-258f-4d82-990c-ddc2b9325514
-md"# Method of Finite Differences"
+md"## Method of Finite Differences"
 
 # ╔═╡ 3f492f16-f235-4f1b-8802-98bce8b9a9ae
 md"
@@ -22,9 +31,12 @@ $f'(x) = \lim_{h \to 0} \frac{f(x+h) - f(x)}{h}$
 
 "
 
+# ╔═╡ 2d1c76a5-adc5-4964-befb-fadc33e4fc68
+
+
 # ╔═╡ 9cae0885-5df6-45cb-9a17-f1bab51c86eb
 md"
-## Forward Finite Difference
+### Forward Finite Difference
 
 If we expand the function $f(x+h)$ around $x$ with $h$ as the variable we get:
 
@@ -35,9 +47,12 @@ $\implies f'(x) = \frac{f(x+h) - f(x)}{h} + O(h)$
 The above is a **first-order** finite difference approximation of the derivative.
 "
 
+# ╔═╡ 787f01c5-0901-4518-ac75-d8d72ac61f61
+
+
 # ╔═╡ 9484b614-2d27-4b07-8e7c-b459bc2184db
 md"
-## Backward Finite Difference
+### Backward Finite Difference
 
 If we expand the function $f(x - h)$ instead we get the formula for **backward first-order** finite difference.
 
@@ -49,9 +64,12 @@ $\implies f'(x) = \frac{f(x) - f(x-h)}{h} + O(h)$
 - Depends on current function value and a previous function value.
 "
 
+# ╔═╡ 8620482d-0274-48c4-ba22-79299da01c3a
+
+
 # ╔═╡ c52856d7-7cc4-4523-b54d-7ee88990161c
 md"
-## Central Finite Difference
+### Central Finite Difference
 
 If we subtract the expansions of $f(x+h)$ and $f(x-h)$ then we get:
 
@@ -67,9 +85,12 @@ md"
 **_Note on improving the approximations:_** We can obtain higher order approximations from taylor series expansions of $f(x + nh)$ for different integer values of $n$ and then combining those to eliminate powers of $h$. [Table of such approximations](https://en.wikipedia.org/wiki/Finite_difference_coefficient).
 "
 
+# ╔═╡ a7a6c805-286a-4f05-bb93-1686d43cd9d7
+
+
 # ╔═╡ ecf8d6af-988f-4eee-ae4d-71e2c8c830f5
 md"
-## The Second Derivative
+### The Second Derivative
 
 We can also calculate an approximation for the second derivative of a function f(x) using the taylor expansions of $f(x + nh)$.
 
@@ -87,7 +108,7 @@ $\implies f''(x) = \frac{f(x-h) - 2f(x) + f(x+h)}{h^2} + O(h^2)$
 
 
 # ╔═╡ 43f6eb4b-23a4-4f1f-80da-d77ee2fdf458
-md"# The Euler Method"
+md"## The Euler Method"
 
 # ╔═╡ f7e40646-29ee-456f-8af1-6452d7104509
 md"
@@ -96,7 +117,7 @@ Used to solve first order initial value problems. (ODEs)
 
 # ╔═╡ 94c1a797-67a4-4ad6-8a54-10cc7071f5d0
 md"
-## The Forward Euler Method
+### The Forward Euler Method
 
 - Given an initial value problem, we can express the ODE in terms of finite differences as:
 $\frac{dy}{dx} = f(y(x), x), \hspace{0.1in} y(x_0) = y_0$
@@ -113,9 +134,12 @@ $\boxed{y_{n+1} \approx y_n + \Delta f(y_n, x_n)}$
 - This is an **explicit** method i.e the next point in series is completely determined by the previous points in series. 
 "
 
+# ╔═╡ 822c40b7-c8d9-4b55-8649-be655eb96174
+
+
 # ╔═╡ ac9cc650-c65e-4d62-a7df-bad8966c0bc5
 md"
-## The Backward Euler Method
+### The Backward Euler Method
 
 - If we use the backward finite difference in place of forward, the we get the backward Euler method.
 
@@ -154,7 +178,7 @@ md"
 
 
 # ╔═╡ 9a17ced8-4c1a-4743-af51-2f45cc318a1d
-md"# The Leap Frog Method"
+md"## The Leap Frog Method"
 
 # ╔═╡ 6684910a-0664-474b-ada1-8dd460cf7b74
 md"
@@ -189,12 +213,12 @@ _Round-off error_: The value of $\Delta x$ that can be used in the implementatio
 
 # ╔═╡ b0190855-be2d-49d9-822b-c3d36a764664
 md"
-# Explicit Runge-Kutta Methods
+## Explicit Runge-Kutta Methods
 "
 
 # ╔═╡ 8e900c40-3945-483e-b3ae-85a4600bd6ef
 md"
-## The Midpoint/Modified Euler method
+### The Midpoint/Modified Euler method
 
 - We are given an initial value problem:
 $y'(x) = f(y(x), x), \hspace{0.1in} y(0) = y_0;$
@@ -235,16 +259,83 @@ md"
 
 # ╔═╡ 4a74b198-a328-403a-a342-683aae2672c2
 md"
-# Implicit Runge-Kutta Methods
+## Implicit Runge-Kutta Methods
 
 
 "
 
+# ╔═╡ 65d53e06-b818-40e6-88c9-1f46ea5d95fe
+md"
+- Given the usual first order initial value problem, we can express the derivative as usual with forward finite difference but for the function $f(y(x), x)$ we take the average of the end point values of the interval $\{x, x+h\}$ to get:
+
+$\frac{y(x+h) - y(x)}{h} \approx \frac{1}{2} [f(y(x), x) + f(y(x+h), x+h)]$
+
+- After discretizing:
+
+$y_{n+1} = y_n + \frac{1}{2} \Delta x [f(y_n, x_n) + f(y_{n+1}, x_{n+1}]$
+
+- This is a _second order trapazoidal method_ because local error is of third order and global error is of second order. It is also implicit. We can express it as a two step method by:
+
+$y_{n+1} = y_n + \frac{1}{2} \Delta x [k_1 + k_2] + \mathcal{O}(\Delta x^3)$
+$k_1 = f(y_n, x_n)$
+$k_2 = f\bigg(y_n + \frac{1}{2} \Delta x [k_1 + k_2], x_n + \Delta x\bigg)$
+
+- Solving this method can be a little more complicated compared to an explicit method because like backwards euler method we need to use a root finding method at each iteration in order to find $y_{n+1}$.
+
+- Similar to Explicit Runge-Kutta methods this method can be generalized to a familiy of methods. And can also be extended to multiple steps to reduce global error.
+
+"
+
+# ╔═╡ 273009bf-48a8-4433-9724-b9986d9808f6
+
+
+# ╔═╡ e1ac200c-1b35-4988-9af7-e650e81b33e8
+md"
+## RK4: Everyone's Favorite
+"
+
+# ╔═╡ e2432ced-08c4-45d4-8ae6-b03111fbfe0d
+md"
+- RK4 refers to the _fourth order Runge-Kutta method_. It has high accuracy and good stability, making it the first choice for solving ODEs and PDEs.
+
+- The RK4 algorithm can be represented as:
+
+$\boxed{y_{n+1} = y_n + Δx (k_1 + 2k_2 + 2k_3 + k_4 ) + O(Δx^5)}$
+$k_1 = f (y_n, x_n)$
+$k_2 = f (y_n + \frac{1}{2}k_1 Δx, x_n + Δx)$
+$k_3 = f (y_n + \frac{1}{2}k_2 Δx, x_n + Δx)$
+$k_4 = f (y_n + k_3 Δx, x_n + Δx)$
+
+- The local error is of order $\Delta x^5$ and the global error is of order $\Delta x^4$.
+
+- This method has bigger region of stability than forward euler method and leap frog method and better accuracy. This is also the largest possible (solvable) explicit N-step Runge-Kutta method.
+"
+
+# ╔═╡ 41637ce1-cde0-40a3-b9d2-bd6fec64cfb5
+md"
+## Solving Second Order ODEs
+
+- All the methods above can be adapted to solve second order ODEs.
+
+- Given a second order initial value problem:
+
+$y''(x) = f(y'(x), y(x), x), \hspace{0.2in} y(0)=y_0, \hspace{0.2in}y'(0)=z_0$
+
+- We can write it as two first order coupled equations with the same initial conditions:
+
+$y'(x) = z(x)$
+$z'(x) = f(z(x), y(x), x)$
+
+- Then we can apply the numerical methods on these equations sperately at each iteration of the algorithm.
+"
+
 # ╔═╡ b3693dc4-b08b-4429-9741-88ced438f5b7
 md"
-# Packages 
+## Packages 
 
 These are the available packages for numerical differentiation:
+
+- [_DifferentialEquations.jl_](https://github.com/SciML/DifferentialEquations.jl)
 
 - [_FiniteDifferences.jl_](https://github.com/JuliaDiff/FiniteDifferences.jl)
 
@@ -252,9 +343,6 @@ These are the available packages for numerical differentiation:
 
 - [_FDM_](https://github.com/wesselb/fdm)
 "
-
-# ╔═╡ 8493fa58-4543-49a5-9ecc-0861ce4a3a35
-PlutoUI.TableOfContents(title="TOC: Numerical Differentiation")
 
 # ╔═╡ 00000000-0000-0000-0000-000000000001
 PLUTO_PROJECT_TOML_CONTENTS = """
@@ -334,17 +422,24 @@ uuid = "4ec0a83e-493e-50e2-b9ac-8f72acf5a8f5"
 """
 
 # ╔═╡ Cell order:
+# ╟─bad12d58-51ca-438b-8dbb-ff8bec1715cb
+# ╟─2fffa41b-db5e-4ade-a223-6c08ba8a420c
 # ╟─3e749362-258f-4d82-990c-ddc2b9325514
 # ╟─3f492f16-f235-4f1b-8802-98bce8b9a9ae
+# ╟─2d1c76a5-adc5-4964-befb-fadc33e4fc68
 # ╟─9cae0885-5df6-45cb-9a17-f1bab51c86eb
+# ╟─787f01c5-0901-4518-ac75-d8d72ac61f61
 # ╟─9484b614-2d27-4b07-8e7c-b459bc2184db
+# ╟─8620482d-0274-48c4-ba22-79299da01c3a
 # ╟─c52856d7-7cc4-4523-b54d-7ee88990161c
 # ╟─bb595b17-e1bd-4a73-a157-210fb580fa58
+# ╟─a7a6c805-286a-4f05-bb93-1686d43cd9d7
 # ╟─ecf8d6af-988f-4eee-ae4d-71e2c8c830f5
 # ╟─36cbb557-abc3-45f5-8716-930eaf282e25
 # ╟─43f6eb4b-23a4-4f1f-80da-d77ee2fdf458
 # ╟─f7e40646-29ee-456f-8af1-6452d7104509
 # ╟─94c1a797-67a4-4ad6-8a54-10cc7071f5d0
+# ╟─822c40b7-c8d9-4b55-8649-be655eb96174
 # ╟─ac9cc650-c65e-4d62-a7df-bad8966c0bc5
 # ╟─c9ab491c-2655-42da-a03e-246470d06fc7
 # ╟─266c961c-66b1-48df-975c-0e14b98f7df8
@@ -357,9 +452,13 @@ uuid = "4ec0a83e-493e-50e2-b9ac-8f72acf5a8f5"
 # ╟─8e900c40-3945-483e-b3ae-85a4600bd6ef
 # ╟─5361f744-9e6c-4402-87d4-8bfd7470c9e2
 # ╟─e030c23a-d69a-42db-b01b-104c69622a88
-# ╠═4a74b198-a328-403a-a342-683aae2672c2
+# ╟─4a74b198-a328-403a-a342-683aae2672c2
+# ╟─65d53e06-b818-40e6-88c9-1f46ea5d95fe
+# ╟─273009bf-48a8-4433-9724-b9986d9808f6
+# ╟─e1ac200c-1b35-4988-9af7-e650e81b33e8
+# ╟─e2432ced-08c4-45d4-8ae6-b03111fbfe0d
+# ╟─41637ce1-cde0-40a3-b9d2-bd6fec64cfb5
 # ╟─b3693dc4-b08b-4429-9741-88ced438f5b7
 # ╟─7cbdea3c-e478-434d-92d6-4d2ea5627d8b
-# ╟─8493fa58-4543-49a5-9ecc-0861ce4a3a35
 # ╟─00000000-0000-0000-0000-000000000001
 # ╟─00000000-0000-0000-0000-000000000002
