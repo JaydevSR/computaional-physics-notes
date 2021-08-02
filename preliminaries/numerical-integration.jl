@@ -6,9 +6,7 @@ using InteractiveUtils
 
 # ╔═╡ a4ab362e-f108-11eb-07e1-f199b08c8137
 begin
-	using Pkg
-	Pkg.activate()
-	using PlutoUI, PlutoNotes
+	using PlutoUI
 	PlutoUI.TableOfContents(title="Table of Contents")
 end
 
@@ -51,7 +49,7 @@ $E_G \leq N \times \frac{1}{12} \Delta x^3 M = \frac{b-a}{12} \Delta x^2 M$
 "
 
 # ╔═╡ 59e381b9-b313-422d-851c-c3ba91f886a2
-sectionbreak()
+html"<br><br>"
 
 # ╔═╡ a232bf5e-ad4e-49e2-aac0-8be838ae9e17
 md"## Midpoint Rule"
@@ -90,7 +88,7 @@ $\boxed{\int_a^b f(x) dx \approx \Delta x \sum_{n=0}^{N} f\bigg(\frac{x_{n} + x_
 "
 
 # ╔═╡ 1b209c29-df97-4a9f-9d2a-1259ef1a3d8a
-sectionbreak()
+html"<br><br>"
 
 # ╔═╡ 636b73c8-1285-4c2e-98c2-4af68cf82513
 md"## Simpson's Rule"
@@ -125,7 +123,7 @@ $\int_{a}^{b} f(x) dx = \frac{\Delta x}{3}[f(a) + 2\sum_{n=1}^{N/2 - 1}f(a + 2 n
 "
 
 # ╔═╡ 3c136f2f-090e-4f89-ba28-57e17e2a5de9
-sectionbreak()
+html"<br><br>"
 
 # ╔═╡ cce16849-d6e4-4430-8e2e-98fd74d8ecdd
 md"## Newton-Cotes Rules"
@@ -145,7 +143,7 @@ $\sum_{i=0}^{n} a_{i,n} = n-1$
 "
 
 # ╔═╡ a8a313bf-382b-4add-b579-1157f84f90ff
-sectionbreak(1)
+html"<br>"
 
 # ╔═╡ 4b3114d5-dd47-4673-9c5a-eb514fd85f5b
 md"
@@ -163,7 +161,7 @@ md"
 "
 
 # ╔═╡ 1cb763b4-2caf-4562-9179-34a56e6618fa
-sectionbreak()
+html"<br><br>"
 
 # ╔═╡ 46784270-2f4b-4137-b9a4-ca5567eaeb5c
 md"## Gauss-Legendre Quadrature
@@ -209,13 +207,13 @@ $\boxed{\int_{a}^{b} f(x) dx \approx \frac{1}{2} \Delta x \sum_{n=0}^{N-1}\Bigg[
 md"**More Information on Guassian Quadrature**: Ref. _section 6.5, Computational Quantum Mechanics by Joshua Izaac and Jingbo Wang_."
 
 # ╔═╡ c94ab624-6374-4bb7-82c9-2b626f9dc858
-sectionbreak()
+html"<br><br>"
 
 # ╔═╡ e44b6a31-b464-4916-9f42-d65b7c71d866
 md"## Monte Carlo Methods"
 
 # ╔═╡ 9eab867f-f193-4b79-9965-5fc492e91d46
-sectionbreak()
+html"<br><br>"
 
 # ╔═╡ 90b569e1-d71a-48a7-bb50-8591a409198c
 md"## Packages"
@@ -226,6 +224,83 @@ md"
 - **SciPy** and **NumPy**
 - [HCubature.jl](https://github.com/stevengj/HCubature.jl) and [NIntegration.jl](https://github.com/pabloferz/NIntegration.jl): For higher dimensional integration.
 "
+
+# ╔═╡ 00000000-0000-0000-0000-000000000001
+PLUTO_PROJECT_TOML_CONTENTS = """
+[deps]
+PlutoUI = "7f904dfe-b85e-4ff6-b463-dae2292396a8"
+
+[compat]
+PlutoUI = "~0.7.9"
+"""
+
+# ╔═╡ 00000000-0000-0000-0000-000000000002
+PLUTO_MANIFEST_TOML_CONTENTS = """
+# This file is machine-generated - editing it directly is not advised
+
+[[Base64]]
+uuid = "2a0f44e3-6c83-55bd-87e4-b1978d98bd5f"
+
+[[Dates]]
+deps = ["Printf"]
+uuid = "ade2ca70-3891-5945-98fb-dc099432e06a"
+
+[[InteractiveUtils]]
+deps = ["Markdown"]
+uuid = "b77e0a4c-d291-57a0-90e8-8db25a27a240"
+
+[[JSON]]
+deps = ["Dates", "Mmap", "Parsers", "Unicode"]
+git-tree-sha1 = "81690084b6198a2e1da36fcfda16eeca9f9f24e4"
+uuid = "682c06a0-de6a-54ab-a142-c8b1cf79cde6"
+version = "0.21.1"
+
+[[Logging]]
+uuid = "56ddb016-857b-54e1-b83d-db4d58db5568"
+
+[[Markdown]]
+deps = ["Base64"]
+uuid = "d6f4376e-aef5-505a-96c1-9c027394607a"
+
+[[Mmap]]
+uuid = "a63ad114-7e13-5084-954f-fe012c677804"
+
+[[Parsers]]
+deps = ["Dates"]
+git-tree-sha1 = "94bf17e83a0e4b20c8d77f6af8ffe8cc3b386c0a"
+uuid = "69de0a69-1ddd-5017-9359-2bf0b02dc9f0"
+version = "1.1.1"
+
+[[PlutoUI]]
+deps = ["Base64", "Dates", "InteractiveUtils", "JSON", "Logging", "Markdown", "Random", "Reexport", "Suppressor"]
+git-tree-sha1 = "44e225d5837e2a2345e69a1d1e01ac2443ff9fcb"
+uuid = "7f904dfe-b85e-4ff6-b463-dae2292396a8"
+version = "0.7.9"
+
+[[Printf]]
+deps = ["Unicode"]
+uuid = "de0858da-6303-5e67-8744-51eddeeeb8d7"
+
+[[Random]]
+deps = ["Serialization"]
+uuid = "9a3f8284-a2c9-5f02-9a11-845980a1fd5c"
+
+[[Reexport]]
+git-tree-sha1 = "5f6c21241f0f655da3952fd60aa18477cf96c220"
+uuid = "189a3867-3050-52da-a836-e630ba90ab69"
+version = "1.1.0"
+
+[[Serialization]]
+uuid = "9e88b42a-f829-5b0c-bbe9-9e923198166b"
+
+[[Suppressor]]
+git-tree-sha1 = "a819d77f31f83e5792a76081eee1ea6342ab8787"
+uuid = "fd094767-a336-5f1f-9728-57cf17d0bbfb"
+version = "0.2.0"
+
+[[Unicode]]
+uuid = "4ec0a83e-493e-50e2-b9ac-8f72acf5a8f5"
+"""
 
 # ╔═╡ Cell order:
 # ╟─067aa72b-bebb-4873-86e9-b72e7bcbd97c
@@ -255,3 +330,5 @@ md"
 # ╟─9eab867f-f193-4b79-9965-5fc492e91d46
 # ╟─90b569e1-d71a-48a7-bb50-8591a409198c
 # ╟─ec578cb3-03dd-4377-a5a3-1da004aabfdf
+# ╟─00000000-0000-0000-0000-000000000001
+# ╟─00000000-0000-0000-0000-000000000002
