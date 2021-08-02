@@ -13,9 +13,6 @@ end
 # ╔═╡ bad12d58-51ca-438b-8dbb-ff8bec1715cb
 md"# Preliminaries: Numerical Differentiation"
 
-# ╔═╡ 2fffa41b-db5e-4ade-a223-6c08ba8a420c
-
-
 # ╔═╡ 3e749362-258f-4d82-990c-ddc2b9325514
 md"## Method of Finite Differences"
 
@@ -423,7 +420,7 @@ uuid = "4ec0a83e-493e-50e2-b9ac-8f72acf5a8f5"
 
 # ╔═╡ Cell order:
 # ╟─bad12d58-51ca-438b-8dbb-ff8bec1715cb
-# ╟─2fffa41b-db5e-4ade-a223-6c08ba8a420c
+# ╟─7cbdea3c-e478-434d-92d6-4d2ea5627d8b
 # ╟─3e749362-258f-4d82-990c-ddc2b9325514
 # ╟─3f492f16-f235-4f1b-8802-98bce8b9a9ae
 # ╟─2d1c76a5-adc5-4964-befb-fadc33e4fc68
@@ -459,6 +456,5 @@ uuid = "4ec0a83e-493e-50e2-b9ac-8f72acf5a8f5"
 # ╟─e2432ced-08c4-45d4-8ae6-b03111fbfe0d
 # ╟─41637ce1-cde0-40a3-b9d2-bd6fec64cfb5
 # ╟─b3693dc4-b08b-4429-9741-88ced438f5b7
-# ╟─7cbdea3c-e478-434d-92d6-4d2ea5627d8b
 # ╟─00000000-0000-0000-0000-000000000001
 # ╟─00000000-0000-0000-0000-000000000002
