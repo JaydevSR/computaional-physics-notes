@@ -297,10 +297,10 @@ md"
 
 - The RK4 algorithm can be represented as:
 
-$\boxed{y_{n+1} = y_n + Δx (k_1 + 2k_2 + 2k_3 + k_4 ) + O(Δx^5)}$
+$\boxed{y_{n+1} = y_n + \frac{1}{6} Δx (k_1 + 2k_2 + 2k_3 + k_4 ) + O(Δx^5)}$
 $k_1 = f (y_n, x_n)$
-$k_2 = f (y_n + \frac{1}{2}k_1 Δx, x_n + Δx)$
-$k_3 = f (y_n + \frac{1}{2}k_2 Δx, x_n + Δx)$
+$k_2 = f (y_n + \frac{1}{2}k_1 Δx, x_n + \frac{1}{2} Δx)$
+$k_3 = f (y_n + \frac{1}{2}k_2 Δx, x_n + \frac{1}{2} Δx)$
 $k_4 = f (y_n + k_3 Δx, x_n + Δx)$
 
 - The local error is of order $\Delta x^5$ and the global error is of order $\Delta x^4$.
