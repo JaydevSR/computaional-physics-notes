@@ -212,6 +212,29 @@ html"<br><br>"
 # ╔═╡ e44b6a31-b464-4916-9f42-d65b7c71d866
 md"## Monte Carlo Methods"
 
+# ╔═╡ 20a0c406-7766-4281-95a4-7ce14af09fb4
+md"""
+- When we want to calculate higher dimensional integral, we face a problem called _"curse of dimensionality"_. This refers to the exponential scaling of function evaluations and the error terms with increase in dimensions due to extra dimension of summation (degree of summation.)
+
+- This can be tackled using **Monte-Carlo Method**. This is a statistical method which uses to random sampling of points for evaluating integrals.
+
+- Let's say we need to calculate d-dimensional integral of a function $f: \mathbb{R}^d \rightarrow \mathbb{R}^d$ over a region $\mathcal{R}$ in the domain given by:
+
+$I = \int_{\mathcal{R}} f(\mathbf{x}) d\mathbf{x}$
+
+- Then using the Monte-Carlo method we evaluate the integral by choosing $N$ randomly distributed points $\{\mathbf{x}_1, \dots , \mathbf{x}_N\} \in \mathcal{R}$:
+
+$\int_{\mathcal{R}} f(\mathbf{x}) d\mathbf{x} \approx V(\mathcal{R}) (\bar{f} \pm \sigma_{\bar{f}})\quad\text{where,}$
+
+$V(\mathcal{R}) = \text{Volume of the region}$
+$\bar{f} = \frac{1}{N}\sum_{n=0}^{N}f(\mathbf{x}_n)$
+$\sigma_{\bar{f}} = \frac{1}{\sqrt{N}} \sqrt{\sum_{n=0}^{N} \bigg(f(\mathbf{x}_n^2) - \bar{f}^2\bigg)}$
+
+- Due to the random sampling there is no static global and local error bound instead we use standard deviation to estimate the error in the approximation.
+
+- **Rule of Thumb**: Use monte carlo methods for $d > 2$.
+"""
+
 # ╔═╡ 9eab867f-f193-4b79-9965-5fc492e91d46
 html"<br><br>"
 
@@ -327,6 +350,7 @@ uuid = "4ec0a83e-493e-50e2-b9ac-8f72acf5a8f5"
 # ╟─8377b796-55e3-4f6c-9fe4-4da544e99bfe
 # ╟─c94ab624-6374-4bb7-82c9-2b626f9dc858
 # ╟─e44b6a31-b464-4916-9f42-d65b7c71d866
+# ╟─20a0c406-7766-4281-95a4-7ce14af09fb4
 # ╟─9eab867f-f193-4b79-9965-5fc492e91d46
 # ╟─90b569e1-d71a-48a7-bb50-8591a409198c
 # ╟─ec578cb3-03dd-4377-a5a3-1da004aabfdf
