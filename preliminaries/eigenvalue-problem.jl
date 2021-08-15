@@ -157,6 +157,128 @@ html"<br><br>"
 # ╔═╡ cbc0d76d-f9a6-4159-b86a-8395f35df19b
 md"## Krylov Subspace Techniques"
 
+# ╔═╡ 2d4c88f6-9344-4a0f-ba9f-0fdae61112e2
+md"""
+- For a matrix, $A\in \mathbb{C}^{N\times N}$, and an arbitrary vector $\mathbf{x}\in\mathbb{C}^N$, the _Krylov Subspace_ of $r^{th}$ order is given by:
+
+$\mathcal{K}_r(A, \mathbf{x}) = span(\{\mathbf{x}, A\mathbf{x}, A^2\mathbf{x}, \dots, A^{r-1}\mathbf{x}\})$
+
+- Any vector $\mathbf{u}\in\mathcal{K}_r$ can be written as $\sum_{i=1}^{r} c_i A^{i-1} \mathbf{x}$. This not the most suitable basis representation as it is not orthonormal. So, we orthonormalize this basis to find a new basis:
+
+$\mathcal{Q}_r = \{\mathbf{q}_1, \mathbf{q}_2, \dots, \mathbf{q}_r\}$
+
+- If the matrix $A$ is Hermitian then the above basis is called _**Lanczos basis**_. Otherwise it's called _Arnoldi basis_.
+
+- One of the important properties of Krylov subspaces is the following which can easily be verified using some vector space properties:
+
+$\mathcal{K}_{r+1}(A, \mathbf{x}) = span(\mathcal{Q}_r \cup\{A\mathbf{q_r}\})$
+$\text{where,}\quad\mathcal{Q}_r=\{\mathbf{q}_1, \mathbf{q}_2, \dots, \mathbf{q}_r\}$
+
+- Due to the above property, it is very easy to expand the Krylov subspace to higher orders because in instead of orthonormalizing the whole Krylov basis for $\mathcal{K}_{r+1}$, we only need to orthonormalize one vector $A\mathbf{q}_r$ _w.r.t._ the orthonormal basis of $\mathcal{K}_{r}$
+
+"""
+
+# ╔═╡ a6c20c0c-1695-4610-8888-80347494b3f1
+md"""
+### Lanczos Tridiagonalization
+
+- _Lanczos iteration method_ is an iterative method for finding the Lanczos basis of the Krylov subspace corresponding to a Hermitian matrix.
+- Why though? Well, we can use the Lanczos basis to tridiagonalize the matrix which makes it easier to find eigenvalues using other methods as the matrix becomes almost a diagonal matrix.
+- For this we make use of the following theorems:
+
+!!! warning "Theorem"
+	For every hermitian matrix $A\in \mathbb{C}^{N\times N}$, $\exists$ a unitary matrix $Q \in \mathbb{C}^{N\times N},\ Q^\dagger Q = I$ such that:
+
+	$Q^\dagger A Q = T$
+
+	Where $T$ is a _symmetric tridiagonal matrix_.
+
+!!! warning "Theorem"
+	The unitary matrix given by $Q_N = [\mathbf{q}_1, \dots, \mathbf{q}_N]$ whose columns are the Lanczos basis vectors, tridiagonalizes the corresponding Hermitian matrix $A \in \mathbb{C}^{N\times N}$.
+"""
+
+# ╔═╡ b799e8f3-7172-4bd1-ab61-183741a49a6c
+md"""
+!!! danger "Read Slowly!"
+
+- Now we write the tridiagonal matrix as:
+$T = \begin{bmatrix}a_1 & b1 & \ & \ \\ b1 & a2 & \ddots & \ \\ \ & \ddots & \ddots & b_{N-1} \\ \ & \ & b_{N-1} & a_{N}\end{bmatrix}$
+
+- Then if we write the tridiagonalization equation as $AQ_N = Q_NT$ then we get:
+$(Aq_1 , Aq_2 , . . . , Aq_N )
+= (a_1 q_1 + b_1 q_2 , b_1 q_1 + a_2 q_2 + b_2 q_3 , . . . , b_{N−1} q_{N−1} + a_N q_N )$
+
+- Here $q_i$ are column vectors of $Q_N$. From the above equation we get a system of equation to directly solve for Lanczos vectors:
+
+$\begin{align*}
+b_1\mathbf{q}_2 &= (A-a_1)\mathbf{q}_1\\	
+b_{i-1}\mathbf{q}_i &= (A-a_{i-1})\mathbf{q}_i-1 - b_{i-2}\mathbf{q}_{i-2},\quad 2 < i < N-1 \\
+0 &= (A - a_N)\mathbf{q}_{N} - b_{N-1}\mathbf{q}_{N-1}
+\end{align*}$
+
+- Now for finding the Lanczos vectors and the elements of tridiagonal matrix we simplify this system a bit:
+  1. As, $\mathbf{q}_1$ can be any normalized vector, so we choose a random vector $\mathbf{x_0}$ and take $b_0 \mathbf{q_1} = \mathbf{x}_0$. Where $b_0 = |\mathbf{x}_0|$ to keep $\mathbf{q_1}$ normalized.
+  2. Also we have $a_i = \mathbf{q}_i^\dagger A \mathbf{q}_i$ from the matrix multiplication. And now we define $\mathbf{x}_i = (A-a_{i-1})\mathbf{q}_i-1 - b_{i-2}\mathbf{q}_{i-2}$ for $1 \le i \le N$ so that our system of equations becomes:
+
+  $\text{For } 1 \le i < N:\ b_{i-1}\mathbf{q}_i = \mathbf{x}_{i-1},\ \text{and }\mathbf{x}_N = 0$
+  3. For $\mathbf{q}_i$ to be normalized we have $b_{i} = |\mathbf{x}_{i}| > 0$. But as $b_0 \ne 0$ so we define $\mathbf{q}_0=0$ such that we get the proper equation for $\mathbf{q}_2$.
+
+- **Note**: The method of Lanczos iteration is very much sensitive to round off errors and hence is also prone to instability. On way to reduce such instabilities is to explicitly renormalize the complete set $\{\mathbf{q}_1, \dots, \mathbf{q}_i\}$ on $i^{th}$ iteration at the cost of computational time.
+"""
+
+# ╔═╡ 853d533b-a47a-4155-8a59-d741f6a0e936
+md"""
+!!! info "Code for Lanczos Iteration"
+	$\quad$
+	```julia
+	using Random, LinearAlgebra
+
+	# Example Matrix
+	A = [ 2.00+0.0im -1.00+1.0im  0.00-0.5im  4.25+0.0im;
+		 -1.00-1.0im  4.00+0.0im  1.00+0.0im  7.00+0.0im;
+		  0.00+0.5im  1.00+0.0im  2.00+0.0im -1.00+2.0im;
+		  4.25+0.0im  7.00+0.0im -1.00-2.0im  1.40+0.0im]
+
+	N = size(A)[1]
+
+	# Initialization
+	x = rand(Float64, N)          # random starting vector x0
+	a = [zero(Complex{Float64})]  # a0, ..., aN
+	b = [Complex(norm(x))]	      # b0, ..., bN
+	qii = zeros(N)                # q_{i-1} initialized to q₀=0
+
+	# Lanczos iteration
+	for n=1:N
+		i=n+1                     # For 1 based indexing
+		qi = x / b[i-1]
+		push!(a, dot(qi, A, qi))
+		x = A*qi - a[i]*qi - b[i-1]*qii
+		push!(b, norm(x))
+		qii = qi
+	end
+
+	# Remove very small imaginary parts
+	if_close_then_real(z) = isapprox(imag(z), 0, atol=1e10) ? real(z)+0.0im : z
+	a = [if_close_then_real(x) for x ∈ a]
+	b = [if_close_then_real(x) for x ∈ b]
+
+	# Construct the tridiagonal matrix
+	T = Matrix(Tridiagonal(b[2:end-1], a[2:end], b[2:end-1]))
+	```
+	$\quad$
+"""	
+
+# ╔═╡ 5a2fb1ae-22dd-4b4f-adc8-d1ff2763860f
+html"<br><br>"
+
+# ╔═╡ 4f459acb-97fa-48fd-b044-e14b63575c39
+md"
+## Packages
+
+- **LinearAlgebra.jl**
+- **scipy.linalg** module
+"
+
 # ╔═╡ 00000000-0000-0000-0000-000000000001
 PLUTO_PROJECT_TOML_CONTENTS = """
 [deps]
@@ -247,5 +369,11 @@ uuid = "4ec0a83e-493e-50e2-b9ac-8f72acf5a8f5"
 # ╟─37fb70ca-1f90-4ba8-ab81-b1f60c971357
 # ╟─766e180a-004b-4fa4-a55e-a2ca892645f8
 # ╟─cbc0d76d-f9a6-4159-b86a-8395f35df19b
+# ╟─2d4c88f6-9344-4a0f-ba9f-0fdae61112e2
+# ╟─a6c20c0c-1695-4610-8888-80347494b3f1
+# ╟─b799e8f3-7172-4bd1-ab61-183741a49a6c
+# ╟─853d533b-a47a-4155-8a59-d741f6a0e936
+# ╟─5a2fb1ae-22dd-4b4f-adc8-d1ff2763860f
+# ╟─4f459acb-97fa-48fd-b044-e14b63575c39
 # ╟─00000000-0000-0000-0000-000000000001
 # ╟─00000000-0000-0000-0000-000000000002
