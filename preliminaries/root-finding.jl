@@ -126,7 +126,7 @@ md"
 ## Secant Method
 
 - Used in place of Newton-Raphson method when the derivative of the function is not know beforehand and needs to be numerically calculated.
-- To calculate the derivative, forward finite difference is used: $f'(x_n) \approx \frac{f(x_n) - f(x_{n-1})}{x_n - x_{n-1}}$
+- To calculate the derivative, backwards finite difference is used: $f'(x_n) \approx \frac{f(x_n) - f(x_{n-1})}{x_n - x_{n-1}}$
 - Then the same method and convergence criterion is used as Newton-Raphson method.
 - Convergence is not quadratic due to the use of finite differences. In fact the order of convergence is $φ$, the golden ration. Hence, it has superlinear convergence.
 "
