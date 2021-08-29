@@ -183,24 +183,22 @@ md"""
   $\psi_{N-1} = 2\bigg[\cfrac{m(\Delta x)^2}{\hbar^2}(V_{N-2}-E^{(k)})+1\bigg]\psi_{N-2}-\psi_{N-3} = 0$
 """
 
+# ╔═╡ d5bb45ab-6724-4ec2-b449-001292dc909b
+html"<br>"
+
 # ╔═╡ b4a799e2-3206-4826-a401-b350b16a7c2b
 md"### Example: The Quantum Harmonic Oscillator"
 
 # ╔═╡ 64726134-d3e6-4555-a257-a21716300f91
-begin
-	# Units and constants
-	m=1.0
-	omega=1.0
-	del_x = 1e-3
-	hbar = 1.0
-end
+# Units and constants
+m, omega, hbar, del_x = 1.0, 1.0, 1.0, 1e-3;
 
 # ╔═╡ 07272d1c-ab0f-4d98-8b1b-c173b034ff21
-xgrid = collect(-5:del_x:5)
+xgrid = collect(-5:del_x:5);
 
 # ╔═╡ c2569e01-554f-4060-a743-1aef020b5ecc
 # Define the potential for a harmonic oscillator
-V_x = [1/2 * m * omega * x^2 for x in xgrid]
+V_x = [1/2 * m * omega * x^2 for x in xgrid];
 
 # ╔═╡ 7e18c15f-26f5-48e6-931b-9274c0d5a1b9
 """
@@ -211,8 +209,8 @@ V_x = [1/2 * m * omega * x^2 for x in xgrid]
 `V_x`   : Potential at grid points\n
 `E_n`   : Energy of the state\n
 `m`     : Mass of particle, defaults to 1\n
-`hbar` (keyword): Reduced plank's constant, default units s.t ħ=1\n
-`s`    (keyword): Free shooting parameter, defaults to 1×10⁶\n
+`hbar` (keyword): Reduced plank's constant, default units s.t. ħ=1\n
+`s`    (keyword): Free shooting parameter, defaults to 1×10⁻⁶\n
 """
 function get_eigenfunction(xgrid, V_x, E_n, del_x, m=1; hbar=1, s=1e5)
 	psi_vals = [0, s]  # Initial Conditions
@@ -224,7 +222,7 @@ function get_eigenfunction(xgrid, V_x, E_n, del_x, m=1; hbar=1, s=1e5)
 	
 	normalize!(psi_vals)
 	return psi_vals
-end
+end;
 
 # ╔═╡ 15e0d6e1-40f0-461e-81b9-e041eb8b86c6
 psi_vals = zeros(Float64, length(xgrid), length(0:5));
@@ -238,18 +236,32 @@ end
 # ╔═╡ 45d85d7c-65ca-401f-a1ca-f012708a175b
 begin
 	plotly()
-	p0 = plot(xgrid, psi_vals[:,1], title="n=0")
-	p1 = plot(xgrid, psi_vals[:,2], title="n=1")
-	p2 = plot(xgrid, psi_vals[:,3], title="n=2")
-	p3 = plot(xgrid, psi_vals[:,4], title="n=3")
-	p4 = plot(xgrid, psi_vals[:,5], title="n=4")
-	p5 = plot(xgrid, psi_vals[:,6], title="n=5")
-	plot(
-		p0, p1, p2, p3, p4, p5,
+	plot((plot(xgrid, psi_vals[:,i+1], title="n=$(i)") for i in 0:5)...,  #subplots
 		plot_title="First 6 eigenstates of Quantum Harmonic Oscillator",
-		layout=(6,1), size=(650,1200), legend=false, fontfamily="serif"
-	)
+		layout=(6,1), 
+		size=(650,1200), 
+		legend=false, 
+		fontfamily="serif")
 end
+
+# ╔═╡ b92c5e04-a3eb-46ea-a5ae-7ac02c95ab08
+html"<br>"
+
+# ╔═╡ ba3f1e48-1a7a-4b11-bb4b-77c7cbb5aef6
+md"
+### Node Counting
+
+- In case we want to find a particular eigenstate of the _TISE_, then we can do so by the method of counting nodes, i.e. number of times the eigenfunction crosses $x$-axis.
+
+- Say, a particular state has $n$ nodes and we want to find the energy eigenvalues and the corresponding eigenfunction of that state. This can be done as follows:
+  1. Give and lower and upper bound of energy $E_{\min}$ and $E_\max$.
+  2. Bisect the bounds to get the energy: $E = \cfrac{E_\max - E_\min}{2}$.
+  3. Solve the _TISE_ for the energy $E$. And then count the number of nodes $n'$ in the solution.
+     - If $n' < n$, then $E_\min=E$, solve the _TISE_ again.
+     - If $n' > n$, then $E_\max=E$, solve the _TISE_ again.
+     - If $n'=n$, then proceed to next step.
+  4. Once a function with required number of nodes is found, we perform a root finding method at the end point $x_N$ to better approximate the energy eigenvalue. Then finally find the solution again for the energy $E$ after convergence.
+"
 
 # ╔═╡ 00000000-0000-0000-0000-000000000001
 PLUTO_PROJECT_TOML_CONTENTS = """
@@ -1086,6 +1098,7 @@ version = "0.9.1+5"
 # ╟─2d7bae04-f67c-419c-9312-cbf698211711
 # ╟─9bb05cd9-b3f0-4e49-a570-b5dd96f3cd80
 # ╟─ec5433ff-0b66-4fbf-a694-01fceca10656
+# ╟─d5bb45ab-6724-4ec2-b449-001292dc909b
 # ╟─b4a799e2-3206-4826-a401-b350b16a7c2b
 # ╠═80d58d23-cfb6-4680-ac05-2bf1403763be
 # ╠═64726134-d3e6-4555-a257-a21716300f91
@@ -1094,6 +1107,8 @@ version = "0.9.1+5"
 # ╠═7e18c15f-26f5-48e6-931b-9274c0d5a1b9
 # ╠═15e0d6e1-40f0-461e-81b9-e041eb8b86c6
 # ╠═975df128-b059-4e85-91dd-e200e5cb9a7d
-# ╟─45d85d7c-65ca-401f-a1ca-f012708a175b
+# ╠═45d85d7c-65ca-401f-a1ca-f012708a175b
+# ╟─b92c5e04-a3eb-46ea-a5ae-7ac02c95ab08
+# ╟─ba3f1e48-1a7a-4b11-bb4b-77c7cbb5aef6
 # ╟─00000000-0000-0000-0000-000000000001
 # ╟─00000000-0000-0000-0000-000000000002
