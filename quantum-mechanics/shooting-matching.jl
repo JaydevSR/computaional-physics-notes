@@ -14,7 +14,7 @@ end
 using Plots, LinearAlgebra
 
 # ╔═╡ f285aa8e-027c-11ec-1f5f-b7d46e6d2ffe
-md"# Problems in One Dimension"
+md"# Shooting and Matching Methods For _TISE_"
 
 # ╔═╡ d4041870-2eb6-4837-b67f-f54b6b67abf1
 md"""
@@ -244,6 +244,18 @@ begin
 		fontfamily="serif")
 end
 
+# ╔═╡ a7875333-7683-4e40-82bc-91c775f6d2d1
+begin
+	E_100 = (100 + 0.5)*hbar*omega
+	x1 = collect(-15:del_x:15)
+	V_x1 = [1/2 * m * omega * x^2 for x in x1]
+	phi2_x1 = get_eigenfunction(x1, V_x1, E_100, del_x).^2
+	scaling = maximum(V_x1) / maximum(phi2_x1)
+	plot(x1, V_x1, label="V(x)")
+	plot!(x1, scaling*phi2_x1 .+ E_100, label="ϕ²(x)")
+	plot!(x1, [E_100 for x in x1], label="E₁₀₀")
+end
+
 # ╔═╡ b92c5e04-a3eb-46ea-a5ae-7ac02c95ab08
 html"<br>"
 
@@ -262,6 +274,17 @@ md"
      - If $n'=n$, then proceed to next step.
   4. Once a function with required number of nodes is found, we perform a root finding method at the end point $x_N$ to better approximate the energy eigenvalue. Then finally find the solution again for the energy $E$ after convergence.
 "
+
+# ╔═╡ 6f0f06e4-5375-4f4d-ab2c-6979dec330df
+html"<br><br>"
+
+# ╔═╡ cfb9d201-7804-4015-94f6-ccad1f68e73b
+md"""
+## The Matching Method
+
+
+
+"""
 
 # ╔═╡ 00000000-0000-0000-0000-000000000001
 PLUTO_PROJECT_TOML_CONTENTS = """
@@ -1108,7 +1131,10 @@ version = "0.9.1+5"
 # ╠═15e0d6e1-40f0-461e-81b9-e041eb8b86c6
 # ╠═975df128-b059-4e85-91dd-e200e5cb9a7d
 # ╠═45d85d7c-65ca-401f-a1ca-f012708a175b
+# ╠═a7875333-7683-4e40-82bc-91c775f6d2d1
 # ╟─b92c5e04-a3eb-46ea-a5ae-7ac02c95ab08
 # ╟─ba3f1e48-1a7a-4b11-bb4b-77c7cbb5aef6
+# ╟─6f0f06e4-5375-4f4d-ab2c-6979dec330df
+# ╠═cfb9d201-7804-4015-94f6-ccad1f68e73b
 # ╟─00000000-0000-0000-0000-000000000001
 # ╟─00000000-0000-0000-0000-000000000002
