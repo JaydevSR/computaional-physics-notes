@@ -189,6 +189,9 @@ html"<br>"
 # ╔═╡ b4a799e2-3206-4826-a401-b350b16a7c2b
 md"### Example: The Quantum Harmonic Oscillator"
 
+# ╔═╡ afa81b4f-115a-4b7b-887e-a5fa56e89606
+plotly()
+
 # ╔═╡ 64726134-d3e6-4555-a257-a21716300f91
 # Units and constants
 m, omega, hbar, del_x = 1.0, 1.0, 1.0, 1e-3;
@@ -202,27 +205,54 @@ V_x = [1/2 * m * omega * x^2 for x in xgrid];
 
 # ╔═╡ 7e18c15f-26f5-48e6-931b-9274c0d5a1b9
 """
-	get_eigenfunction(x_grid, V_x, E_n, m=1; hbar=1, s=1e6)
+	get_eigenfunction(x_grid, V_x, E_n; m=1.0, hbar=1.0, s=1e-5, E_err=1e-9)
 
-**Parameters**\n
-`x_grid`: Grid points\n
-`V_x`   : Potential at grid points\n
-`E_n`   : Energy of the state\n
-`m`     : Mass of particle, defaults to 1\n
-`hbar` (keyword): Reduced plank's constant, default units s.t. ħ=1\n
-`s`    (keyword): Free shooting parameter, defaults to 1×10⁻⁶\n
+**Parameters**                       \n
+									 \n
+`x_grid` : Grid points (uniform)     \n
+`V_x`    : Potential at grid points  \n
+`E_range`: Energy of the state       \n
+
+---
+
+`m`     (keyword): Mass of particle, defaults to 1                   \n
+`hbar`  (keyword): Reduced plank's constant, default units s.t. ħ=1  \n
+`s`     (keyword): Free shooting parameter, defaults to 1×10⁻⁵       \n
+`E_err` (keyword): Error bound in energy, defaults to 1/10⁹          \n		
 """
-function get_eigenfunction(xgrid, V_x, E_n, del_x, m=1; hbar=1, s=1e5)
+function shoot_wavefn(xgrid, V_x, E_range; m=1.0, hbar=1.0, s=1e-5, E_err=1e-9)
+	del_x = abs(xgrid[1] - xgrid[2])
 	psi_vals = [0, s]  # Initial Conditions
+	E_max = E_range[2]
+	E_min = E_range[1]
 	
+	# Find the correct energy
+	while(abs(E_max - E_min) > E_err)
+		psi_i1, psi_i2 = psi_vals[1], psi_vals[1]
+		psi_j1, psi_j2 = psi_vals[2], psi_vals[2]
+		psi_k1, psi_k2 = 0, 0
+		
+		E_n = 0.5 * (E_min + E_max)
+		for i = 2:(length(xgrid) - 1)
+			psi_k1 = 2psi_j1 * ((m * del_x^2) * (V_x[i] - E_n) / hbar^2 + 1) - psi_i1
+			psi_k2 = 2psi_j2 * ((m * del_x^2) * (V_x[i] - E_min) / hbar^2 + 1) - psi_i2
+			psi_i1, psi_i2 = psi_j1, psi_j2
+			psi_j1, psi_j2 = psi_k1, psi_k2
+		end
+		
+		# Bisection
+		psi_k1 * psi_k2 > 0 ? (E_min = E_n) : (E_max = E_n)
+	end
+	
+	# Find the complete solution
+	E_n = 0.5(E_max+E_min)
 	for i = 2:(length(xgrid) - 1)
-		psi_ii = 2psi_vals[i] * ((m * del_x^2) * (V_x[i] - E_n) / hbar^2 + 1) - psi_vals[i-1]
-		append!(psi_vals, psi_ii)
+		append!(psi_vals, 2psi_vals[i] * ((m * del_x^2) * (V_x[i] - E_n) / hbar^2 + 1) - psi_vals[i-1])
 	end
 	
 	normalize!(psi_vals)
-	return psi_vals
-end;
+	return E_n, psi_vals
+end
 
 # ╔═╡ 15e0d6e1-40f0-461e-81b9-e041eb8b86c6
 psi_vals = zeros(Float64, length(xgrid), length(0:5));
@@ -230,12 +260,11 @@ psi_vals = zeros(Float64, length(xgrid), length(0:5));
 # ╔═╡ 975df128-b059-4e85-91dd-e200e5cb9a7d
 for state=0:5
 	E_n = (state + 0.5)*hbar*omega
-	psi_vals[:,state+1] = get_eigenfunction(xgrid, V_x, E_n, del_x)
+	E_n, psi_vals[:,state+1] = shoot_wavefn(xgrid, V_x, [E_n, E_n])
 end
 
 # ╔═╡ 45d85d7c-65ca-401f-a1ca-f012708a175b
 begin
-	plotly()
 	plot((plot(xgrid, psi_vals[:,i+1], title="n=$(i)") for i in 0:5)...,  #subplots
 		plot_title="First 6 eigenstates of Quantum Harmonic Oscillator",
 		layout=(6,1), 
@@ -246,14 +275,14 @@ end
 
 # ╔═╡ a7875333-7683-4e40-82bc-91c775f6d2d1
 begin
-	E_100 = (100 + 0.5)*hbar*omega
+	E_range_state = [100, 101]
 	x1 = collect(-15:del_x:15)
 	V_x1 = [1/2 * m * omega * x^2 for x in x1]
-	phi2_x1 = get_eigenfunction(x1, V_x1, E_100, del_x).^2
-	scaling = maximum(V_x1) / maximum(phi2_x1)
+	E_state, psi2_x1 = shoot_wavefn(x1, V_x1, E_range_state)
+	scaling = maximum(V_x1) / maximum(psi2_x1.^2) / 2
 	plot(x1, V_x1, label="V(x)")
-	plot!(x1, scaling*phi2_x1 .+ E_100, label="ϕ²(x)")
-	plot!(x1, [E_100 for x in x1], label="E₁₀₀")
+	plot!(x1, scaling*psi2_x1.^2 .+ E_state, label="ϕ²(x)")
+	plot!(x1, [E_state for x in x1], label="E=$(round(E_state;digits=2))")
 end
 
 # ╔═╡ b92c5e04-a3eb-46ea-a5ae-7ac02c95ab08
@@ -275,6 +304,78 @@ md"
   4. Once a function with required number of nodes is found, we perform a root finding method at the end point $x_N$ to better approximate the energy eigenvalue. Then finally find the solution again for the energy $E$ after convergence.
 "
 
+# ╔═╡ ccf1ecb9-5f84-4e56-b0d6-8885e1af31bc
+"""
+	get_eigenfunction(x_grid, V_x, E_n; m=1.0, hbar=1.0, s=1e-5, E_err=1e-9)
+
+**Parameters**                                              \n
+									                        \n
+`x_grid` : Grid points (uniform)                            \n
+`V_x`    : Potential at grid points                         \n
+`E_range`: Energy of the state                              \n
+`nodes`  : number of nodes 							        \n
+
+---
+
+`m`     (keyword): Mass of particle, defaults to 1                   \n
+`hbar`  (keyword): Reduced plank's constant, default units s.t. ħ=1  \n
+`s`     (keyword): Free shooting parameter, defaults to 1×10⁻⁵       \n
+`E_err` (keyword): Error bound in energy, defaults to 1/10⁹          \n		
+"""
+function shoot_wavefn_nodes(xgrid, V_x, E_range, nodes; m=1.0, hbar=1.0, s=1e-5, E_err=1e-9)
+	del_x = abs(xgrid[1] - xgrid[2])
+	psi_vals = [0, s]  # Initial Conditions
+	E_max = E_range[2]
+	E_min = E_range[1]
+	E_n = 0.5(E_max + E_min)
+	
+	# Find the correct energy
+	while(true)
+		psi_i1, psi_i2 = psi_vals[1], psi_vals[1]
+		psi_j1, psi_j2 = psi_vals[2], psi_vals[2]
+		psi_k1, psi_k2 = 0, 0
+		for i = 2:(length(xgrid) - 1)
+			psi_k1 = 2psi_j1 * ((m * del_x^2) * (V_x[i] - E_n) / hbar^2 + 1) - psi_i1
+			psi_k2 = 2psi_j2 * ((m * del_x^2) * (V_x[i] - E_min) / hbar^2 + 1) - psi_i2
+			psi_i1, psi_i2 = psi_j1, psi_j2
+			psi_j1, psi_j2 = psi_k1, psi_k2
+			append!(psi_vals, psi_k1)
+		end
+		
+		# Count nodes
+		nodes_now = 0
+		for i in 2:length(psi_vals)
+			psi_vals[i-1] * psi_vals[i] < 0 ? nodes_now += 1 : 0
+		end
+		
+		if nodes_now > nodes
+			E_max = E_n
+		elseif nodes_now < nodes
+			E_min = E_n
+		else
+			psi_k1 * psi_k2 > 0 ? (E_min = E_n) : (E_max = E_n)  # Bisection
+		end
+		
+		# If convergence achieved or state not present in given range
+		if (abs(E_max - E_min) < E_err / 2)
+			normalize!(psi_vals)
+			return E_n, psi_vals
+		else
+			E_n = 0.5 * (E_min + E_max)
+			psi_vals = [0, s] 
+		end
+	end
+end
+
+# ╔═╡ a6bd02c0-3e33-43c9-a660-ee3631c075de
+begin
+	E_range_state2 = [6, 12]
+	xgrid2 = collect(-6.5:del_x:7)
+	V_x2 = [1/2 * m * omega * x^2 for x in xgrid2]
+	E_state2, psi2_x2 = shoot_wavefn_nodes(xgrid2, V_x2, E_range_state2, 11)
+	plot(xgrid2, psi2_x2, label="ϕ(x), E=$(E_state2)")
+end
+
 # ╔═╡ 6f0f06e4-5375-4f4d-ab2c-6979dec330df
 html"<br><br>"
 
@@ -282,7 +383,78 @@ html"<br><br>"
 md"""
 ## The Matching Method
 
+- The matching method (or multiple shooting method) is used to counter the numerical unstability of the shooting method near boundary point we are shooting for.
 
+- In this method we shoot from both boundaries simultaneously and then match the solution at some point (usually the classical turning point) subject to continuity of wave-function as well as its derivative.
+
+- The discretized Schrödinger's equation is simply rearanged to get the iteration when shooting from right boundart point.
+
+- If $x=m$ is the matching point then at this point, then the continuity of wave-function can be satisfied by simply scaling one of the sides.
+
+- Then the differentiabilty condition is used for iterating to find the correct value of E.
+
+- In case of symmetric potentials only, half of the solution has to be determined as solutions are also symmetric or anti-symmetric about the central point. So, the shooting can be performed from central-point and one of the boundary-points.
+"""
+
+# ╔═╡ 583e75ac-8827-4a19-b38f-24c86d272ace
+function match_wavefn!(psi, E_n, V_x, Nx, del_x, n_match; m=1.0, hbar=1.0, s=1e-5)
+    psi[2] = psi[end - 1] = s
+    for i =  2:n_match - 1
+        psi[i+1] = 2psi[i] * ((m * del_x^2) * (V_x[i] - E_n) / hbar^2 + 1) - psi[i-1]
+    end
+
+    for i = Nx - 1:-1:n_match + 2
+        psi[i-1] = 2psi[i] * ((m * del_x^2) * (V_x[i] - E_n) / hbar^2 + 1) - psi[i+1]
+    end
+
+    # Scale the right part equal to left part
+    psi_left = psi[n_match]
+    psi_right = 2psi[n_match+1] * ((m * del_x^2) * (V_x[n_match+1] - E_n) / hbar^2 + 1) - psi[n_match+2]
+    psi[n_match+1:end] = (psi_left / psi_right) * psi[n_match+1:end]
+    normalize!(psi)
+end
+
+# ╔═╡ d8da2198-86c8-491a-9065-817461bd46a4
+function find_eigenstate_matching(xgrid, V_x, E_min, E_max, x_match; m=1.0, hbar=1.0, s=1e-5, err=1e-9)
+    Nx = length(xgrid)
+    del_x = abs(xgrid[2] - xgrid[1])
+    n_match = 0
+    for i = 1:Nx
+        (xgrid[i] <= x_match) ? continue : ((n_match = i); break)
+    end
+    E_i, E_j = E_min,  E_max
+    psi = zeros(Float64, length(xgrid))
+    match_wavefn!(psi, E_i, V_x, Nx, del_x, n_match)
+    gE_i = psi[n_match+1] + psi[n_match-1] - 2psi[n_match]
+    while (abs(E_j - E_i) > err)
+        E_k = 0.5(E_i+E_j)
+        match_wavefn!(psi, E_k, V_x, Nx, del_x, n_match)
+        gE_k = psi[n_match+1] + psi[n_match-1] - 2psi[n_match]
+        if (gE_k * gE_i > 0)
+            E_i, gE_i = E_k, gE_k
+        else
+            E_j = E_k
+        end
+    end
+    match_wavefn!(psi, 0.5(E_i+E_j), V_x, Nx, del_x, n_match)
+    return 0.5(E_i+E_j), psi
+end
+
+# ╔═╡ 7fccdbbe-37cc-4198-b638-d954c987cedb
+begin
+	xgrid3 = collect(-15:del_x:15)
+	V_x3 = [1 / 2 * m * omega * x^2 for x in xgrid3]
+	E_n, psi = find_eigenstate_matching(xgrid3, V_x3, 12, 15, 5)
+
+	plot(xgrid3, psi, label="E=$(E_n)")
+end
+
+# ╔═╡ 3f2945bb-9294-4c71-8d03-77f1936405e5
+html"<br><br>"
+
+# ╔═╡ 2d5a958e-6ba1-4fe9-868f-e4062c317f07
+md"""
+## Numerov-Cooley Method
 
 """
 
@@ -1124,6 +1296,7 @@ version = "0.9.1+5"
 # ╟─d5bb45ab-6724-4ec2-b449-001292dc909b
 # ╟─b4a799e2-3206-4826-a401-b350b16a7c2b
 # ╠═80d58d23-cfb6-4680-ac05-2bf1403763be
+# ╠═afa81b4f-115a-4b7b-887e-a5fa56e89606
 # ╠═64726134-d3e6-4555-a257-a21716300f91
 # ╠═07272d1c-ab0f-4d98-8b1b-c173b034ff21
 # ╠═c2569e01-554f-4060-a743-1aef020b5ecc
@@ -1134,7 +1307,14 @@ version = "0.9.1+5"
 # ╠═a7875333-7683-4e40-82bc-91c775f6d2d1
 # ╟─b92c5e04-a3eb-46ea-a5ae-7ac02c95ab08
 # ╟─ba3f1e48-1a7a-4b11-bb4b-77c7cbb5aef6
+# ╠═ccf1ecb9-5f84-4e56-b0d6-8885e1af31bc
+# ╠═a6bd02c0-3e33-43c9-a660-ee3631c075de
 # ╟─6f0f06e4-5375-4f4d-ab2c-6979dec330df
-# ╠═cfb9d201-7804-4015-94f6-ccad1f68e73b
+# ╟─cfb9d201-7804-4015-94f6-ccad1f68e73b
+# ╠═583e75ac-8827-4a19-b38f-24c86d272ace
+# ╠═d8da2198-86c8-491a-9065-817461bd46a4
+# ╠═7fccdbbe-37cc-4198-b638-d954c987cedb
+# ╟─3f2945bb-9294-4c71-8d03-77f1936405e5
+# ╠═2d5a958e-6ba1-4fe9-868f-e4062c317f07
 # ╟─00000000-0000-0000-0000-000000000001
 # ╟─00000000-0000-0000-0000-000000000002
